@@ -1,4 +1,5 @@
 #[derive(Debug)]
+#[allow(dead_code)]
 struct Elf {
     id: usize,
     foods: Vec<u32>,
