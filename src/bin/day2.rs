@@ -54,7 +54,7 @@ impl MatchResult {
     }
 }
 
-pub fn day2() {
+fn main() {
     let data = include_str!("day2.txt");
 
     let moves: u32 = data

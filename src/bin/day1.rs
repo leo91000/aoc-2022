@@ -6,8 +6,8 @@ struct Elf {
     calories: u32,
 }
 
-pub fn day1() {
-    let input = include_str!("input.txt");
+fn main() {
+    let input = include_str!("day1.txt");
 
     let splits: Vec<String> = input.split("\n\n").map(|s| s.to_string()).collect();
 
