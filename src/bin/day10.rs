@@ -53,7 +53,7 @@ const BOARD_LINES: u32 = 6;
 const LINE_LENGTH: u32 = 40;
 
 impl InstructionSet {
-    fn get_signal_at_cycle(&self, cycle: u32) -> (i32, i32) {
+    fn get_x_at_cycle(&self, cycle: u32) -> i32 {
         let mut x = 1;
         let mut current_cycle = 0_u32;
         let mut i = 0;
@@ -70,7 +70,11 @@ impl InstructionSet {
             i += 1;
         }
 
-        (x, cycle as i32 * x)
+        x
+    }
+
+    fn get_signal_at_cycle(&self, cycle: u32) -> i32 {
+        self.get_x_at_cycle(cycle) * cycle as i32
     }
 
     fn draw_board(&self) -> Board {
@@ -81,8 +85,7 @@ impl InstructionSet {
 
             for j in 1..=LINE_LENGTH {
                 let cycle = j + LINE_LENGTH * i;
-                let (x, _) = self.get_signal_at_cycle(cycle);
-                let x = x as i64;
+                let x = self.get_x_at_cycle(cycle) as i64;
                 let j = j as i64 - 1;
 
                 let pixel = if j == x - 1 || j == x || j == x + 1 {
@@ -105,7 +108,7 @@ impl FromStr for InstructionSet {
     type Err = anyhow::Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let commands = s.lines().map(|l| l.parse().unwrap()).collect();
+        let commands = s.lines().map(|l| l.parse()).collect::<Result<_, _>>()?;
         Ok(InstructionSet { commands })
     }
 }
@@ -142,12 +145,12 @@ impl Display for Board {
 }
 
 fn part1(instructions: &InstructionSet) -> i32 {
-    instructions.get_signal_at_cycle(20).1
-        + instructions.get_signal_at_cycle(60).1
-        + instructions.get_signal_at_cycle(100).1
-        + instructions.get_signal_at_cycle(140).1
-        + instructions.get_signal_at_cycle(180).1
-        + instructions.get_signal_at_cycle(220).1
+    instructions.get_signal_at_cycle(20)
+        + instructions.get_signal_at_cycle(60)
+        + instructions.get_signal_at_cycle(100)
+        + instructions.get_signal_at_cycle(140)
+        + instructions.get_signal_at_cycle(180)
+        + instructions.get_signal_at_cycle(220)
 }
 
 fn part2(instructions: &InstructionSet) -> Board {
